@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude Code en 60 segundos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF0F6;--fg:#101426;--mut:#555d7d;--btn:#101426;--btnfg:#fff;
+--cobalt:#2547E8;--deep:#162A9E;--chalk:#F6F4EF;--ink:#101426;--sun:#FFD43B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0f1e;--fg:#eef0f6;--mut:#9aa3c7;--btn:#eef0f6;--btnfg:#101426}}
+:root[data-theme="dark"]{--bg:#0c0f1e;--fg:#eef0f6;--mut:#9aa3c7;--btn:#eef0f6;--btnfg:#101426}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--fg);font-family:'Bricolage Grotesque',system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+.stage{container-type:inline-size;position:relative;aspect-ratio:16/9;width:min(100%,1100px);background:var(--cobalt);color:var(--chalk);border-radius:14px;overflow:hidden}
+.sc{position:absolute;inset:0;padding:5cqw 6cqw 10cqw;display:none;flex-direction:column;gap:2.4cqw}
+.sc.on{display:flex}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:3cqw}
+h1{margin:0;font-weight:800;font-size:8.6cqw;line-height:1;letter-spacing:-.03em}
+h2{margin:0;font-weight:800;font-size:4.6cqw;line-height:1.05;letter-spacing:-.02em;max-width:70cqw}
+p{margin:0;font-size:2.6cqw;line-height:1.3}
+.step{flex:none;background:var(--sun);color:var(--ink);font-weight:800;font-size:2cqw;padding:.6cqw 1.6cqw;border-radius:5cqw}
+.hook{justify-content:center;gap:2.8cqw}
+.hook h1::after{content:"";display:inline-block;width:.42em;height:.78em;background:var(--sun);margin-left:.14em;animation:bl 1s steps(1) infinite}
+.row{background:rgba(255,255,255,.13);border-left:.9cqw solid var(--sun);padding:1.5cqw 2.4cqw;font-weight:800;font-size:3.6cqw;border-radius:0 1cqw 1cqw 0;width:60cqw}
+.rows{display:flex;flex-direction:column;gap:1.8cqw;margin-top:1.2cqw}
+.term{background:var(--chalk);color:var(--ink);border-radius:1.3cqw;padding:2.2cqw 2.8cqw;font:700 2.3cqw/1.65 'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;box-shadow:0 1.1cqw 0 var(--deep)}
+.ln{white-space:pre-wrap;min-height:1.65em}
+.p{color:#8A5F00}.ok{color:#0B7A4B}.cm{color:#5d6479;font-weight:500}
+.hl{background:var(--sun);padding:0 .5em;border-radius:.4em}
+.pill{align-self:flex-start;background:var(--sun);color:var(--ink);font-weight:800;font-size:2.4cqw;padding:.9cqw 2cqw;border-radius:5cqw}
+.keys{display:flex;align-items:center;gap:2cqw;font-weight:800;font-size:5cqw;margin-top:1cqw}
+.key{background:var(--chalk);color:var(--ink);padding:1.2cqw 3cqw;border-radius:1.3cqw;box-shadow:0 .9cqw 0 var(--deep);font-family:'JetBrains Mono',ui-monospace,monospace}
+.rv{opacity:0;transition:opacity .3s}.rv.on{opacity:1}
+.ty.act::after{content:"";display:inline-block;width:.6em;height:1.1em;background:var(--ink);vertical-align:-.2em;margin-left:2px;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.cap{position:absolute;left:50%;bottom:2.4cqw;transform:translateX(-50%);max-width:84%;background:rgba(16,20,38,.86);color:#fff;font-size:2.1cqw;line-height:1.3;padding:.9cqw 2cqw;border-radius:1cqw;text-align:center}
+.cap:empty{display:none}
+.ctl{display:flex;align-items:center;gap:12px;width:min(100%,1100px)}
+.ctl button{flex:none;background:var(--btn);color:var(--btnfg);border:0;border-radius:8px;padding:9px 16px;font:700 15px 'Bricolage Grotesque',system-ui,sans-serif;cursor:pointer}
+.ctl button:focus-visible,.ctl input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.ctl input{flex:1;accent-color:var(--cobalt)}
+.tm{flex:none;font:700 14px 'JetBrains Mono',ui-monospace,monospace;color:var(--mut);min-width:84px;text-align:right}
+@media (prefers-reduced-motion:reduce){.hook h1::after,.ty.act::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+<section class="sc hook" data-s="0" data-e="6">
+  <h1>Claude Code<br>en 60 segundos</h1>
+  <p class="rv" data-at="1.4">De cero a tu primer cambio, paso a paso.</p>
+</section>
+
+<section class="sc" data-s="6" data-e="16">
+  <h2>Un agente de programación que vive en tu terminal</h2>
+  <div class="rows">
+    <div class="row rv" data-at="8.2">Lee tu código</div>
+    <div class="row rv" data-at="10.6">Edita archivos</div>
+    <div class="row rv" data-at="13">Ejecuta comandos</div>
+  </div>
+</section>
+
+<section class="sc" data-s="16" data-e="27">
+  <div class="hd"><h2>Instálalo con un solo comando</h2><span class="step">Paso 1 de 4</span></div>
+  <div class="term">
+    <div class="ln cm">macOS, Linux y WSL</div>
+    <div class="ln"><span class="p">$</span> <span class="ty" data-at="17.4" data-cps="30" data-t="curl -fsSL https://claude.ai/install.sh | bash"></span></div>
+    <div class="ln cm">Windows (PowerShell)</div>
+    <div class="ln"><span class="p">&gt;</span> <span class="ty" data-at="21.2" data-cps="30" data-t="irm https://claude.ai/install.ps1 | iex"></span></div>
+  </div>
+  <div class="pill rv" data-at="24.4">También hay app de escritorio y extensión para VS Code</div>
+</section>
+
+<section class="sc" data-s="27" data-e="35">
+  <div class="hd"><h2>Entra a tu proyecto y escribe claude</h2><span class="step">Paso 2 de 4</span></div>
+  <div class="term">
+    <div class="ln"><span class="p">$</span> <span class="ty" data-at="27.8" data-cps="12" data-t="cd mi-proyecto"></span></div>
+    <div class="ln"><span class="p">$</span> <span class="ty" data-at="29.6" data-cps="9" data-t="claude"></span></div>
+    <div class="ln rv ok" data-at="31.2">✻ Bienvenido a Claude Code</div>
+  </div>
+  <p class="rv" data-at="32.6">La primera vez te pedirá iniciar sesión.</p>
+</section>
+
+<section class="sc" data-s="35" data-e="43">
+  <div class="hd"><h2>Deja que Claude conozca tu proyecto</h2><span class="step">Paso 3 de 4</span></div>
+  <div class="term">
+    <div class="ln"><span class="p">&gt;</span> <span class="ty" data-at="36" data-cps="8" data-t="/init"></span></div>
+    <div class="ln rv cm" data-at="37.6">● Explorando tu código…</div>
+    <div class="ln rv ok" data-at="39.2">✓ CLAUDE.md creado</div>
+  </div>
+  <p class="rv" data-at="40.4">Un resumen de tu proyecto que Claude lee en cada sesión.</p>
+</section>
+
+<section class="sc" data-s="43" data-e="52">
+  <div class="hd"><h2>Pídelo como se lo dirías a un colega</h2><span class="step">Paso 4 de 4</span></div>
+  <div class="term">
+    <div class="ln"><span class="p">&gt;</span> <span class="ty" data-at="43.8" data-cps="20" data-t="arregla el bug del login y corre los tests"></span></div>
+    <div class="ln rv cm" data-at="46.3">● Leyendo auth.ts</div>
+    <div class="ln rv cm" data-at="47.4">● Editando auth.ts  <span class="ok">+4</span> −1</div>
+    <div class="ln rv" data-at="48.8">¿Aplicar cambios?  <span class="hl">Sí</span>  No</div>
+  </div>
+</section>
+
+<section class="sc" data-s="52" data-e="57">
+  <h2>Para cambios grandes, usa el modo plan</h2>
+  <div class="keys"><span class="key">Shift</span>+<span class="key">Tab</span></div>
+  <p class="rv" data-at="54">Claude propone, tú apruebas. También: /plan seguido de tu tarea.</p>
+</section>
+
+<section class="sc hook" data-s="57" data-e="60.1">
+  <h1>Escribe /help<br>y empieza</h1>
+  <p>code.claude.com/docs</p>
+</section>
+
+<div class="cap" id="cap"></div>
+</div>
+
+<div class="ctl">
+  <button id="pp" aria-label="Reproducir o pausar">Pausar</button>
+  <input id="seek" type="range" min="0" max="600" value="0" aria-label="Línea de tiempo">
+  <span class="tm" id="tm">0:00 / 1:00</span>
+</div>
+
+<script>
+const D=60, st=document.getElementById('stage');
+const scs=[...st.querySelectorAll('.sc')].map(e=>({e,s:+e.dataset.s,x:+e.dataset.e}));
+const tys=[...st.querySelectorAll('.ty')].map(e=>({e,at:+e.dataset.at,cps:+e.dataset.cps,txt:e.dataset.t,n:-1}));
+const rvs=[...st.querySelectorAll('.rv')].map(e=>({e,at:+e.dataset.at}));
+const caps=[[0,'Aprende a usar Claude Code en un minuto.'],[6,'Es un agente que lee tu código, edita archivos y ejecuta comandos.'],[16,'Paso uno: instálalo con un solo comando.'],[24.4,'También hay app de escritorio y extensión para VS Code.'],[27,'Paso dos: entra a tu proyecto y escribe claude.'],[35,'Paso tres: ejecuta /init y Claude escribe un archivo CLAUDE.md sobre tu proyecto.'],[43,'Paso cuatro: pide lo que necesites en lenguaje natural.'],[48.6,'Revisa cada cambio y apruébalo.'],[52,'Para cambios grandes, Shift más Tab activa el modo plan.'],[57,'Escribe /help y empieza.']];
+const capEl=document.getElementById('cap'),pp=document.getElementById('pp'),seek=document.getElementById('seek'),tm=document.getElementById('tm');
+let t=0,playing=true,last=performance.now(),lastCap=-1;
+const fmt=s=>'0:'+String(Math.floor(s)).padStart(2,'0');
+function render(){
+  scs.forEach(o=>o.e.classList.toggle('on',t>=o.s&&t<o.x));
+  tys.forEach(o=>{
+    const n=Math.max(0,Math.min(o.txt.length,Math.floor((t-o.at)*o.cps)));
+    if(n!==o.n){o.e.textContent=o.txt.slice(0,n);o.n=n}
+    o.e.classList.toggle('act',t>=o.at&&t<o.at+o.txt.length/o.cps+.6);
+  });
+  rvs.forEach(o=>o.e.classList.toggle('on',t>=o.at));
+  let ci=0;caps.forEach((c,i)=>{if(t>=c[0])ci=i});
+  if(ci!==lastCap){capEl.textContent=caps[ci][1];lastCap=ci}
+  seek.value=Math.round(t*10);
+  tm.textContent=fmt(t)+' / 1:00';
+}
+function sync(){pp.textContent=playing?'Pausar':(t>=D?'Repetir':'Reproducir')}
+function toggle(){
+  if(!playing&&t>=D)t=0;
+  playing=!playing;last=performance.now();sync();
+}
+function frame(now){
+  const dt=(now-last)/1000;last=now;
+  if(playing){t+=dt;if(t>=D){t=D;playing=false;sync()}}
+  render();requestAnimationFrame(frame);
+}
+pp.addEventListener('click',toggle);
+seek.addEventListener('input',()=>{t=seek.value/10;sync();render()});
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'&&e.target.tagName!=='BUTTON'&&e.target.tagName!=='INPUT'){e.preventDefault();toggle()}
+});
+sync();requestAnimationFrame(frame);
+</script>
+</body>
+</html>
